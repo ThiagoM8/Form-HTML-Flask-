@@ -1,56 +1,84 @@
-@charset "UTF-8"
+@charset "UTF-8";
 
-body{
-    background-color: aquamarine;
+/* Estilos do body, para o fundo e centralização */
+body {
+    background: url(../Imagens/5072612.jpg) no-repeat center center fixed; /* Define a imagem de fundo */
+    background-size: cover; /* Faz a imagem cobrir toda a tela */
+    display: flex; /* Habilita Flexbox para alinhamento */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    min-height: 100vh; /* Garante que o body ocupe 100% da altura da tela */
+    margin: 0; /* Remove a margem padrão */
 }
 
-div#form_fundo{
-    background-color: blue;
-    margin: 10% 25% 25% 25% ;
-    text-align: center;
-    border-radius: 20px;
-    font-weight: bold;
-    box-shadow: 2px 5px 5px black;
+/* Estilos da caixa do formulário */
+div#form_frente {
+    background-color: rgba(255, 255, 255, 0.2); /* Cor de fundo branca semitransparente */
+    backdrop-filter: blur(10px); /* Aplica o efeito de desfoque */
+    border-radius: 20px; /* Arredonda as bordas */
+    box-shadow: 2px 5px 5px rgba(0, 0, 0, 0.5); /* Sombra mais escura e suave */
+    width: 500px; /* Define a largura da caixa */
+    max-width: 90%; /* Limita a largura em telas menores */
+    padding: 30px; /* Adiciona espaçamento interno */
+    text-align: center; /* Alinha o texto ao centro */
 }
 
-div#form_frente{
-    background-color: gray;
-    margin: 10% 25% 25% 25% ;
-    text-align: center;
-    border-radius: 20px;
-    font-weight: bold;
-    box-shadow: 2px 5px 5px black;
-    padding: 30px;
+/* Estilos para o título Login */
+h1 {
+    color: white; /* Cor do texto do título */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombra no texto para melhor leitura */
+    margin-bottom: 20px; /* Adiciona espaçamento inferior */
+    background-color: blueviolet; /* Fundo semitransparente para o título */
+    padding: 10px; /* Espaçamento interno */
+    border-radius: 10px; /* Borda arredondada */
+    display: inline-block; /* Faz o fundo da cor cobrir apenas o texto */
 }
 
-label{
-    font-size: 30px;
-    font-weight: bold;
-    border-radius: 10px;
-    padding: 20px;
+/* Estilos para as labels (NOME, SENHA) */
+label {
+    color: white; /* Cor branca para as labels */
+    font-size: 1.2em; /* Tamanho da fonte */
+    font-weight: bold; /* Deixa o texto em negrito */
+    margin-top: 15px; /* Adiciona espaçamento superior */
+    display: block; /* Faz a label ocupar uma linha */
 }
 
-input{
-    border-radius: 20px;
-    font-size: 30px;
-    font-weight: bold;
+/* Estilos para os campos de input */
+input {
+    border-radius: 10px; /* Borda arredondada */
+    font-size: 1.1em; /* Tamanho da fonte */
+    font-weight: bold; /* Deixa o texto em negrito */
+    padding: 10px; /* Espaçamento interno */
+    width: 100%; /* Ocupa 100% da largura do contêiner */
+    margin-bottom: 15px; /* Espaçamento inferior */
+    box-sizing: border-box; /* Inclui o padding na largura total */
+    border: none; /* Remove a borda padrão */
+    background-color: rgba(255, 255, 255, 0.8); /* Fundo do input semitransparente */
+    color: black; /* Cor do texto dentro do input */
 }
 
-input:focus{
-    background-color: bisque;
-    color: blueviolet;
+/* Efeito ao focar no campo */
+input:focus {
+    outline: none; /* Remove o contorno azul do navegador */
+    box-shadow: 0 0 5px orange; /* Adiciona uma sombra laranja ao focar */
+    background-color: white; /* Deixa o fundo opaco ao focar */
 }
 
-button{
-    font-size: 50px;
-    font-weight: bold;
-    border-radius: 20px;
-    background-color: darkcyan;
+/* Estilos para o botão */
+button {
+    font-size: 1.5em; /* Tamanho da fonte */
+    font-weight: bold; /* Deixa o texto em negrito */
+    border-radius: 10px; /* Borda arredondada */
+    background-color: orange; /* Cor de fundo do botão */
+    color: white; /* Cor do texto do botão */
+    padding: 15px 30px; /* Espaçamento interno */
+    border: none; /* Remove a borda */
+    cursor: pointer; /* Muda o cursor para um ponteiro */
+    margin-top: 20px; /* Espaçamento superior */
+    transition: background-color 0.3s ease; /* Transição suave */
 }
 
-button:hover{
-    background-color: brown;
-    color: cadetblue;
-    font-size: 50px;
-    cursor: pointer;
+/* Efeito ao passar o mouse sobre o botão */
+button:hover {
+    background-color: brown; /* Muda a cor de fundo */
 }

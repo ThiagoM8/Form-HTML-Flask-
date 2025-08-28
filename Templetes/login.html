@@ -7,23 +7,20 @@
     <link rel="stylesheet" href="./home.css">
 </head>
 <body>
-   <div id="form_fundo">
-    <h1>Login</h1>
-    <h1></h1>
-        <div id="form_frente">
-            <form action="/login" id="login" method="post">
-                <label for="nome">NOME</label>
-                <input type="text" nome="nome" id="nome" required placeholder="Digite seu Login"><br><br>
-                <label for="senha" id="senha" >SENHA</label>
-                <input type="password" name="senha" id="senha" required placeholder="Digite sua Senha"><br><br>
-                    <button type="submit" id="btn_login">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>ENTRAR
-                    </button>
-            </form>
-        </div>
+    <div id="form_frente">
+        <h1>Login</h1>
+        <form action="/login" id="login" method="post">
+            <label for="nome">NOME</label>
+            <input type="text" name="nome" id="nome" required placeholder="Digite seu Login"><br><br>
+            <label for="senha">SENHA</label>
+            <input type="password" name="senha" id="senha" required placeholder="Digite sua Senha"><br><br>
+            <button type="submit" id="btn_login">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>ENTRAR
+            </button>
+        </form>
     </div>
 </body>
 </html>
