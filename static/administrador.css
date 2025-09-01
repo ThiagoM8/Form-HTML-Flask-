@@ -1,0 +1,16 @@
+
+
+@import url(../static/home.css);
+
+
+
+.titulo{
+     color: white;
+    background-color: #dc3545; /* Cor de fundo vermelha para alerta */
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-top: 15px; /* Adiciona um espaço acima do alerta */
+    text-align: center; /* Centraliza o texto */
+    font-size: 0.9em;
+    font-weight: bold;
+}

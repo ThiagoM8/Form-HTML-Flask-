@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HOME</title>
-    <link rel="stylesheet" href="./home.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
 </head>
 <body>
     <div id="form_frente">
@@ -14,6 +14,14 @@
             <input type="text" name="nome" id="nome" required placeholder="Digite seu Login"><br><br>
             <label for="senha">SENHA</label>
             <input type="password" name="senha" id="senha" required placeholder="Digite sua Senha"><br><br>
+                
+            {% set menssagem = get_flashed_messages() %}
+                {% if menssagem %}
+                    <div class="flash_alerta">
+                        {{menssagem[0]}}
+                    </div>
+                {% endif %}
+                
             <button type="submit" id="btn_login">
                 <span></span>
                 <span></span>

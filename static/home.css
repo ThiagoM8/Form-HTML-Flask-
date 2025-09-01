@@ -2,13 +2,25 @@
 
 /* Estilos do body, para o fundo e centralização */
 body {
-    background: url(../Imagens/5072612.jpg) no-repeat center center fixed; /* Define a imagem de fundo */
+    background: url(imagens/5072612.jpg) no-repeat center center fixed; /* Define a imagem de fundo */
     background-size: cover; /* Faz a imagem cobrir toda a tela */
     display: flex; /* Habilita Flexbox para alinhamento */
     justify-content: center; /* Centraliza horizontalmente */
     align-items: center; /* Centraliza verticalmente */
     min-height: 100vh; /* Garante que o body ocupe 100% da altura da tela */
     margin: 0; /* Remove a margem padrão */
+}
+
+/*Estilos para o alerta*/
+div.flash_alerta{
+        color: white;
+    background-color: #dc3545; /* Cor de fundo vermelha para alerta */
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-top: 15px; /* Adiciona um espaço acima do alerta */
+    text-align: center; /* Centraliza o texto */
+    font-size: 0.9em;
+    font-weight: bold;
 }
 
 /* Estilos da caixa do formulário */
