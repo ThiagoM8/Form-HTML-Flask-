@@ -1,74 +1,131 @@
-
-
-from flask import Flask, render_template, redirect, request, flash
+from flask import Flask, render_template, redirect, request, flash, session
 import json
+import ast
+import os
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'THIMENDES'
+# É essencial usar uma chave secreta segura e única.
+app.config['SECRET_KEY'] = 'CHAVESEGURAeLONGA'
 
-logado = False
+# Função para carregar os usuários do arquivo JSON
+def carregar_usuarios():
+    try:
+        with open('usuarios.json', 'r') as arquivo:
+            return json.load(arquivo)
+    except (FileNotFoundError, json.JSONDecodeError):
+        # Se o arquivo não existir ou estiver vazio/corrompido, retorna uma lista vazia
+        return []
 
+# Função para salvar os usuários no arquivo JSON
+def salvar_usuarios(usuarios):
+    with open('usuarios.json', 'w') as arquivo:
+        json.dump(usuarios, arquivo, indent=4)
 
 @app.route('/')
 def home():
-    global logado
-    logado = False
+    # Limpa a sessão ao retornar para a página inicial
+    session.pop('logado', None)
     return render_template('login.html')
 
 @app.route('/adm')
 def adm():
-    if logado == True:
-        return render_template('administrador.html')
-    if logado == False:
+    # Verifica se o usuário está logado usando a sessão
+    if session.get('logado'):
+        usuarios = carregar_usuarios()
+        return render_template('administrador.html', usuarios=usuarios)
+    else:
+        # Redireciona para a página de login se não estiver logado
+        flash('Você precisa estar logado para acessar a página de administrador.')
         return redirect('/')
-
 
 @app.route('/login', methods=['POST'])
 def login():
-    
-    global logado
-
     nome = request.form.get('nome')
     senha = request.form.get('senha')
     
-    with open('usuarios.json') as usuariosTemp:
-        usuarios = json.load(usuariosTemp)
-        cont = 0
-        for usuario in usuarios:
-            cont += 1
+    if not nome or not senha:
+        flash('Nome de usuário e senha são obrigatórios.')
+        return redirect('/')
 
-            if nome == 'adm' and senha == '000':
-                logado = True
-                return redirect('/adm')
-            
-            if usuario['nome'] == nome and usuario['senha'] == senha:
-                return render_template("usuarios.html")
+    # Credenciais do administrador
+    if nome == 'adm' and senha == '000':
+        session['logado'] = True
+        return redirect('/adm')
+
+    # Validação de usuário normal
+    usuarios = carregar_usuarios()
+    for usuario in usuarios:
+        if usuario['nome'] == nome and usuario['senha'] == senha:
+            # Redireciona para uma página de usuário ou exibe uma mensagem
+            flash(f"Bem-vindo, {nome}!")
+            return redirect('/adm') # Por exemplo, redireciona para a página de adm
     
-        if cont >= len(usuarios):
-            flash('Usuário inválido')
-            return redirect("/")
+    # Se nenhuma credencial corresponder
+    flash('Nome de usuário ou senha inválidos.')
+    return redirect("/")
     
 @app.route('/cadastrarUsuario', methods=['POST'])
 def cadastrarUsuario():
-    user = []
+    if not session.get('logado'):
+        flash('Você precisa estar logado para cadastrar um usuário.')
+        return redirect('/')
+
     nome = request.form.get('nome')
     senha = request.form.get('senha')
-    user = [
-        {
-            "nome": nome,
-            "senha": senha
-        }
-    ]
-    with open('usuarios.json') as usuariosTemp:
-        usuarios = json.load(usuariosTemp)
+
+    if not nome or not senha:
+        flash('Nome e senha são obrigatórios para o cadastro.')
+        return redirect('/adm')
+
+    usuarios = carregar_usuarios()
     
-    usuarioNovo = usuarios + user
+    # Adiciona o novo usuário
+    novo_usuario = {"nome": nome, "senha": senha}
+    usuarios.append(novo_usuario)
+    salvar_usuarios(usuarios)
+    
+    flash(f'{nome} Cadastrado com sucesso!')
+    return redirect('/adm')
 
-    with open('usuarios.json', 'w') as gravarTemp:
-        json.dump(usuarioNovo, gravarTemp, indent=4)
+@app.route('/excluirUsuario', methods=['POST'])
+def excluirUsuario():
+    if not session.get('logado'):
+        flash('Você precisa estar logado para excluir um usuário.')
+        return redirect('/')
 
+    nome_para_excluir = request.form.get('usuarioPexcluir')
+
+    usuarios = carregar_usuarios()
+    
+    # Filtra o usuário a ser excluído
+    usuarios_atualizados = [u for u in usuarios if u['nome'] != nome_para_excluir]
+    
+    # Verifica se algum usuário foi realmente removido
+    if len(usuarios_atualizados) < len(usuarios):
+        salvar_usuarios(usuarios_atualizados)
+        # Use a variável nome_para_excluir, que foi definida.
+        flash(f'Usuário {nome_para_excluir} Excluído com sucesso!')
+    else:
+        flash(f'Usuário {nome_para_excluir} não encontrado.')
+    
+    return redirect('/adm')
+
+@app.route("/upload", methods=['POST'])
+def upload():
+    global logado
+    logado = True
+
+    arquivo = request.files.get('documento')
+    nome_arquivo = arquivo.filename.replace(" ", "-")
+    arquivo.save(os.path.join('static/arquivos', nome_arquivo))
+    flash('Arquivo enviado!')
+    
     return redirect('/adm')
 
 
-if __name__ in "__main__":
-    app.run(debug=True)    
+
+if __name__ == "__main__":
+    # Garante que o arquivo usuarios.json exista ao iniciar a aplicação
+    if not os.path.exists('usuarios.json'):
+        salvar_usuarios([])
+    app.run(debug=True)

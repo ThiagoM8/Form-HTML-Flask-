@@ -7,28 +7,62 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='administrador.css') }}">
 </head>
 <body>
-    <div id="form_frente">
-        <h1 class="titulo"ADMINISTRADOR</h1>
-        <form action="/cadastrarUsuario" id="login" method="post">
-            <label for="nome">NOME</label>
-            <input type="text" name="nome" id="nome" required placeholder="Digite seu Login"><br><br>
-            <label for="senha">SENHA</label>
-            <input type="password" name="senha" id="senha" required placeholder="Digite sua Senha"><br><br>
+    <div class="main-container">
+        <!-- Contêiner do Formulário -->
+        <div id="cadastro-container">
+            <h1 class="titulo">ADMINISTRADOR</h1>
+            <form action="/cadastrarUsuario" id="login" method="post">
+                <label for="nome">NOME</label>
+                <input type="text" name="nome" id="nome" required placeholder="Digite seu Login"><br><br>
+                <label for="senha">SENHA</label>
+                <input type="password" name="senha" id="senha" required placeholder="Digite sua Senha"><br><br>
                 
-            {% set menssagem = get_flashed_messages() %}
+                {% set menssagem = get_flashed_messages() %}
                 {% if menssagem %}
                     <div class="flash_alerta">
                         {{menssagem[0]}}
                     </div>
                 {% endif %}
                 
-            <button type="submit" id="btn_login">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>CADASTRAR
-            </button>
-        </form>
+                <button type="submit" id="btn_login">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>CADASTRAR
+                </button>
+            </form>
+        </div>
+
+        <!-- Contêiner da Lista de Usuários -->
+        <div id="lista-usuarios">
+            <h1>Usuários Cadastrados</h1>
+            <div id="lista" class="listagem">
+                <ul>
+                    <!-- Percorre a lista de usuários e exibe cada um -->
+                    {% for usuario in usuarios %}
+                        <li>
+                            <p>Nome: {{ usuario.nome }}</p>
+                            <p>Senha: {{ usuario.senha }}</p>
+                        </li>
+                        <form action="/excluirUsuario" method="post">
+                                <input type="hidden" name="usuarioPexcluir" value="{{ usuario.nome }}">
+                                <button type="submit">Excluir</button>
+                            </form>
+                        -------------------------------
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="form_fundo" class="upload">
+        <h1>ENVIAR ARQUIVOS</h1>
+        <div id="form_frente" classe="upload">
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <input type="file" name="documento" id="documento"><br>
+                <button type="submit">ENVIAR</button>
+            </form>
+        </div>
     </div>
 </body>
 </html>
