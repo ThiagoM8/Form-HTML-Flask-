@@ -1,11 +1,11 @@
 from flask import Flask, render_template, redirect, request, flash, session
 import json
-import ast
 import os
 
 app = Flask(__name__)
 # É essencial usar uma chave secreta segura e única.
-app.config['SECRET_KEY'] = 'CHAVESEGURAeLONGA'
+# NUNCA use 'THIMENDES' em produção.
+app.config['SECRET_KEY'] = 'uma_chave_secreta_muito_segura_e_longa_aqui'
 
 # Função para carregar os usuários do arquivo JSON
 def carregar_usuarios():
@@ -38,6 +38,16 @@ def adm():
         flash('Você precisa estar logado para acessar a página de administrador.')
         return redirect('/')
 
+@app.route('/usuarios')
+def usuarios():
+    if logado == True:
+        arquivo = []
+    for documento in os.path.join(app.root_path, 'static', 'arquivos'):
+        arquivo.append(documento)
+        return render_template("usuarios.html", arquivos=arquivo)
+    else:
+        return redirect('/')
+
 @app.route('/login', methods=['POST'])
 def login():
     nome = request.form.get('nome')
@@ -58,7 +68,7 @@ def login():
         if usuario['nome'] == nome and usuario['senha'] == senha:
             # Redireciona para uma página de usuário ou exibe uma mensagem
             flash(f"Bem-vindo, {nome}!")
-            return redirect('/adm') # Por exemplo, redireciona para a página de adm
+            return render_template("usuarios.html", user=usuario)
     
     # Se nenhuma credencial corresponder
     flash('Nome de usuário ou senha inválidos.')
@@ -109,20 +119,6 @@ def excluirUsuario():
         flash(f'Usuário {nome_para_excluir} não encontrado.')
     
     return redirect('/adm')
-
-@app.route("/upload", methods=['POST'])
-def upload():
-    global logado
-    logado = True
-
-    arquivo = request.files.get('documento')
-    nome_arquivo = arquivo.filename.replace(" ", "-")
-    arquivo.save(os.path.join('static/arquivos', nome_arquivo))
-    flash('Arquivo enviado!')
-    
-    return redirect('/adm')
-
-
 
 if __name__ == "__main__":
     # Garante que o arquivo usuarios.json exista ao iniciar a aplicação
